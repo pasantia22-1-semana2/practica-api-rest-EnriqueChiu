@@ -8,7 +8,7 @@ export class Server{
     this._port = port;
     this._nameapp = nameapp;
     this._api = express();
-    this.initMiddlawares();
+    //this.initMiddlawares();
     this.initRoutes();
   }
 
@@ -18,7 +18,7 @@ export class Server{
   }
 
   initRoutes(){
-    //this._api.use('/api/v1/note', routerNote)
+    this._api.use('/api/v1/note', routerNote)
     this._api.use('/home', (req, res)=>{
       res.json({menssage:"Welcome to my api"})
     })
