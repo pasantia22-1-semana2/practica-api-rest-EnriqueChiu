@@ -22,7 +22,7 @@ PUT  http://localhost:5000/api/v1/note
 Content-Type: application/json
 
 {
-    "id": 4,
+    "id":2,
     "title": "new 2 update note", 
     "content": "this is note update", 
     "status": false

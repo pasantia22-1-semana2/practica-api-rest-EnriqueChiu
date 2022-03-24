@@ -136,7 +136,7 @@ export class NoteModels{
     let items = this.readJsonFile();
     let item = items.find((item)=> item._id == id)
     if (item){
-      let index = this.index(id)
+      let index = items.findIndex((item)=> item._id == id)
       item._title = title;
       item._content = content;
       item._status = status;
@@ -148,20 +148,6 @@ export class NoteModels{
     return false
   }
 
-  /**
-   * Metodo para buscar la posicion que se encuentra nota dado un id
-   * @param {*} id el id de la nota
-   * @returns retorna la posicion de la nota
-   */
-  index(id){
-    let items = this.readJsonFile();
-    items.find(function(item, index){
-      if (item._id == id){
-        return index
-      }
-    });
-    return -1;
-  }
 
   /**
    * Metodo para eliminar el contenido de un json
