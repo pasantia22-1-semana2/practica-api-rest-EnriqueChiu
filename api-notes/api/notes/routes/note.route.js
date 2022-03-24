@@ -1,41 +1,34 @@
 import express from 'express';
+import { NoteCtl } from '../controller/note.ctl.js';
 
 const routerNote = express.Router();
+
+const noteController = new NoteCtl();
 
 /**
  * ruta para obtener todas las notas
  */
-routerNote.get('/', (req, res)=>{
-  res.json({menssage: "this is route GET"});
-});
+routerNote.get('/', noteController.getAllNotes);
 
 /**
  * ruta para obtener solo una nota
  */
-routerNote.get('/:id', (req, res)=>{
-  res.json({menssage: "this is route GET one element"})
-});
+routerNote.get('/:id', noteController.getIdNote);
 
 /**
  * ruta para hacer PUT
  */
-routerNote.put('/', (req, res)=>{
-    res.json({menssage: "this is route PUT"})
-});
+routerNote.put('/', noteController.updateNote);
 
 /**
  * ruta para hacer POST
- */
-routerNote.post('/', (req, res)=>{
-    res.json({menssage: "this is route POST"})
-});
+ */   
+routerNote.post('/', noteController.createNewNote);
 
 /**
  * ruta para hacer DELETE
  */
-routerNote.delete('/',(req, res)=>{
-    res.json({menssage: "this is route DELETE"})
-})
+routerNote.delete('/', noteController.deleteNote);
 
 
 export default routerNote;
