@@ -144,7 +144,6 @@ export class NoteModels{
       this.writeJsonFile(items)
       return true
     }
-    
     return false
   }
 
@@ -153,8 +152,14 @@ export class NoteModels{
    * Metodo para eliminar el contenido de un json
    * @returns retorna un mensaje
    */
-  delete(){
-    this.writeJsonFile([])
-    return {message: "Delete Success"}
+  delete(id){
+    let items = this.readJsonFile();
+    let index = items.findIndex((item)=> item._id == id);
+    if (index >= 0){
+      items.splice(index,1);
+      this.writeJsonFile(items)
+      return {message: "Delete Success"};
+    }
+    return {message: "User not found"};
   }
 }

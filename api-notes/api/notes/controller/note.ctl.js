@@ -1,5 +1,5 @@
 import {Note, NoteModels} from '../models/note.models.js';
-
+import {response} from  '../../../response/response.js';
 
 const noteModel = new NoteModels();
 
@@ -15,8 +15,13 @@ export class NoteCtl{
    * @param {*} res respons de la peticion
    */
   getAllNotes(req,res){
-    let allNotes = noteModel.all();
-    res.json(allNotes);  
+    try {
+      let allNotes = noteModel.all();
+      response.succes(req, res, allNotes, 200);
+    } catch (error) {
+      let errorMessage = error
+      response.error(req, res, errorMessage, 500)
+    }
   }
 
   /**
@@ -25,9 +30,15 @@ export class NoteCtl{
    * @param {*} res respons de la peticion
    */
   getIdNote(req, res){
+    try {
       let id = req.params.id;
       let note = noteModel.findById(id)
-      res.json(note)
+
+      response.succes(req, res, note, 200);
+    } catch (error) {
+      let errorMessage = error
+      response.error(req, res, errorMessage, 500)
+    }
   }
 
   /**
@@ -36,12 +47,21 @@ export class NoteCtl{
    * @param {*} res respons de la peticion
    */
   updateNote(req, res){
-    let {id, title, content, status} = req.body;
-    let result = noteModel.update(id, title, content, status)
-    if (result){
-      return res.json({message: "Update Success"});
+    try {
+      let id = req.params.id;
+      let {title, content, status} = req.body;
+      let result = noteModel.update(id, title, content, status)
+      if (result){
+        let messageSucces = "Update Success";
+        response.succes(req, res, messageSucces, 200);
+      }else{
+        let messageError = "Error user not found";
+        response.error(req, res, messageError, 500)
+      }
+    } catch (error) {
+      let errorMessage = error
+      response.error(req, res, errorMessage , 500)
     }
-    return res.json({message: "Error Update, id not find"})
   }
 
   /**
@@ -51,13 +71,26 @@ export class NoteCtl{
    * @returns retorna el resultado
    */
   async createNewNote(req,res){
-    let {id, title, content, status} = req.body
-    const NewNote = new Note(id, title, content, status);
-    let result = await noteModel.save(NewNote);
-    if (result > 0){
-      return res.json({message : "Created Success"});
+    let {title, content, status} = req.body;
+    if (title !== undefined && content !== undefined && status !== undefined){
+      try {
+        const NewNote = new Note(title, content, status);
+        let result = await noteModel.save(NewNote);
+        if (result === 0){
+          let messageError = 'Error not created note';  
+          response.error(req, res, messageError, 500)
+        }else{
+          let messageSucces = 'Created Success'
+          response.succes(req, res, messageSucces, 200)
+        }
+      } catch (error) {
+        let errorMessage = error
+        response.error(req, res, errorMessage , 500)
+      }
+    }else {
+      let errorMessage = 'Error data is undefined'
+      response.error(req, res, errorMessage, 500)
     }
-    return res.json({message: "Error"});
   }
 
   /**
@@ -65,9 +98,16 @@ export class NoteCtl{
    * @param {*} req request de la peticion
    * @param {*} res respons de la peticion
    */
+
   deleteNote(req, res){
-    let result = noteModel.delete();
-    res.json(result);
+    try {
+      let id = req.params.id;
+      let result = noteModel.delete(id);
+      response.error(req, res, result, 500)
+    } catch (error) {
+      let errorMessage = error
+      response.error(req, res, errorMessage , 500)
+    }
   }
 
 
